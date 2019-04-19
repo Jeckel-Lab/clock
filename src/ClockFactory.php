@@ -13,17 +13,17 @@ use Exception;
 class ClockFactory
 {
     /**
-     * @param bool   $frozen_clock
-     * @param string $frozen_clock_file
+     * @param bool   $fakeClock
+     * @param string $fakeClockFile
      * @return ClockInterface
      * @throws Exception
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function getClock(bool $frozen_clock = false, string $frozen_clock_file = ''): ClockInterface
+    public function getClock(bool $fakeClock = false, string $fakeClockFile = ''): ClockInterface
     {
-        if ($frozen_clock) {
-            if (is_readable($frozen_clock_file)) {
-                $clock = file_get_contents($frozen_clock_file);
+        if ($fakeClock) {
+            if (is_readable($fakeClockFile)) {
+                $clock = file_get_contents($fakeClockFile);
             }
             if (empty($clock)) {
                 $clock = 'now';

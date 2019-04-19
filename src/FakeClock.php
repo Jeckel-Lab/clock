@@ -28,7 +28,7 @@ class FakeClock implements ClockInterface
     /**
      * @param DateTimeImmutable $now
      */
-    public function setTo(DateTimeImmutable $now): void
+    public function setClock(DateTimeImmutable $now): void
     {
         $this->now = $now;
     }
