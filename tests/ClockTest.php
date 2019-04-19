@@ -15,9 +15,12 @@ final class ClockTest extends TestCase
     public function testNow()
     {
         $now = new DateTimeImmutable('now');
-        $service = new Clock();
-        $systemClock = $service->now();
-        $this->assertGreaterThanOrEqual($now, $systemClock);
-        $this->assertLessThanOrEqual(new DateTimeImmutable('now'), $systemClock);
+        $clock = new Clock();
+        $time = $clock->now();
+        $this->assertGreaterThanOrEqual($now, $time);
+        $this->assertLessThanOrEqual(new DateTimeImmutable('now'), $time);
+
+        // 2nd call return a new DateTimeImmutable
+        $this->assertNotSame($time, $clock->now());
     }
 }
