@@ -15,5 +15,13 @@
             "Jeckel\\Clock\\": "src/"
         }
     },
-    "require": {}
+    "autoload-dev": {
+        "psr-4": {
+            " Test\\Jeckel\\Clock\\": "tests/"
+        }
+    },
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^8.1"
+    }
 }
