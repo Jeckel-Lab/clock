@@ -1,0 +1,14 @@
+{
+    "name": "jeckel/clock",
+    "description": "Clock abstraction library",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Julien MERCIER-ROJAS",
+            "email": "julien@jeckel-lab.fr"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
