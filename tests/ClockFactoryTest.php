@@ -22,7 +22,7 @@ final class ClockFactoryTest extends TestCase
      */
     public function testGetClock()
     {
-        $this->assertInstanceOf(Clock::class, (new ClockFactory())->getClock());
+        $this->assertInstanceOf(Clock::class, ClockFactory::getClock());
     }
 
     /**
@@ -33,7 +33,7 @@ final class ClockFactoryTest extends TestCase
     {
         $now = new DateTimeImmutable('now');
 
-        $clock = (new ClockFactory())->getClock(true);
+        $clock = ClockFactory::getClock(true);
         $this->assertInstanceOf(FakeClock::class, $clock);
 
         $time = $clock->now();
@@ -50,7 +50,7 @@ final class ClockFactoryTest extends TestCase
     {
         $frozentime = "2018-02-01 10:30:15";
         $root = vfsStream::setup('root', 444, ['clock' => $frozentime]);
-        $clock = (new ClockFactory())->getClock(true, $root->url() . '/clock');
+        $clock = ClockFactory::getClock(true, $root->url() . '/clock');
         $this->assertEquals($frozentime, $clock->now()->format("Y-m-d h:i:s"));
     }
 }
