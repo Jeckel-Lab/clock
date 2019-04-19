@@ -19,7 +19,7 @@ class ClockFactory
      * @throws Exception
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    static public function getClock(bool $fakeClock = false, string $fakeClockFile = ''): ClockInterface
+    public static function getClock(bool $fakeClock = false, string $fakeClockFile = ''): ClockInterface
     {
         if ($fakeClock) {
             if (is_readable($fakeClockFile)) {
