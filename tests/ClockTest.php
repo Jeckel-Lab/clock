@@ -7,7 +7,7 @@ use DateTimeImmutable;
 use Jeckel\Clock\Clock;
 use PHPUnit\Framework\TestCase;
 
-final class SystemClockTest extends TestCase
+final class ClockTest extends TestCase
 {
     /**
      * @throws \Exception
