@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Jeckel\Clock;
+namespace Tests\JeckelLab\Clock;
 
-use Jeckel\Clock\FakeClock;
+use JeckelLab\Clock\FakeClock;
 use PHPUnit\Framework\TestCase;
 
 /**

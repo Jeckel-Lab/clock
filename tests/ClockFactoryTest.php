@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Jeckel\Clock;
+namespace Tests\JeckelLab\Clock;
 
 use DateTimeImmutable;
-use Jeckel\Clock\Clock;
-use Jeckel\Clock\ClockFactory;
-use Jeckel\Clock\FakeClock;
+use Exception;
+use JeckelLab\Clock\Clock;
+use JeckelLab\Clock\ClockFactory;
+use JeckelLab\Clock\FakeClock;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamWrapper;
 use PHPUnit\Framework\TestCase;
@@ -27,7 +28,7 @@ final class ClockFactoryTest extends TestCase
 
     /**
      * @test getClock
-     * @throws \Exception
+     * @throws Exception
      */
     public function testGetFakeClock()
     {
@@ -44,13 +45,13 @@ final class ClockFactoryTest extends TestCase
 
     /**
      * @test getClock
-     * @throws \Exception
+     * @throws Exception
      */
     public function testGetFakeClockFromFile()
     {
         $frozentime = "2018-02-01 10:30:15";
         $root = vfsStream::setup('root', 444, ['clock' => $frozentime]);
         $clock = ClockFactory::getClock(true, $root->url() . '/clock');
-        $this->assertEquals($frozentime, $clock->now()->format("Y-m-d h:i:s"));
+        $this->assertEquals($frozentime, $clock->now()->format('Y-m-d h:i:s'));
     }
 }

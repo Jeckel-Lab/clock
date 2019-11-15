@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Jeckel\Clock;
+namespace JeckelLab\Clock;
 
 use DateTimeImmutable;
 use Exception;

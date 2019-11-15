@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Jeckel\Clock;
+namespace JeckelLab\Clock;
+
+use DateTimeImmutable;
 
 /**
  * Interface ClockInterface
@@ -9,7 +11,7 @@ namespace Jeckel\Clock;
 interface ClockInterface
 {
     /**
-     * @return \DateTimeImmutable
+     * @return DateTimeImmutable
      */
-    public function now(): \DateTimeImmutable;
+    public function now(): DateTimeImmutable;
 }

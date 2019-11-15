@@ -1,5 +1,5 @@
 {
-    "name": "jeckel/clock",
+    "name": "jeckel-lab/clock",
     "description": "Clock abstraction library",
     "type": "library",
     "license": "MIT",
@@ -12,12 +12,12 @@
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
-            "Jeckel\\Clock\\": "src/"
+            "JeckelLab\\Clock\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            " Test\\Jeckel\\Clock\\": "tests/"
+            " Tests\\JeckelLab\\Clock\\": "tests/"
         }
     },
     "require": {
