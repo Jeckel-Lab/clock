@@ -1,3 +1,7 @@
+[![Latest Stable Version](https://poser.pugx.org/jeckel-lab/clock/v/stable)](https://packagist.org/packages/jeckel-lab/clock)
+[![Total Downloads](https://poser.pugx.org/jeckel-lab/clock/downloads)](https://packagist.org/packages/jeckel-lab/clock)
+[![Build Status](https://travis-ci.org/jeckel-lab/clock.svg?branch=master)](https://travis-ci.org/jeckel-lab/clock)
+
 # Clock
 
 A clock abstraction library for PHP which allow to mock system clock when testing
@@ -21,8 +25,8 @@ With SF4 we use the internal DI system with the factory. The factory will get di
 Configure DI with a factory in `config/services.yaml`:
 ```yaml
 # config/services.yaml
-    Jeckel\Clock\ClockInterface:
-        factory: ['Jeckel\Clock\ClockFactory', getClock]
+    JeckelLab\Clock\ClockInterface:
+        factory: ['JeckelLab\Clock\ClockFactory', getClock]
         arguments: ['%fake_clock%', '%fake_clock_file%']
 ```
 Configure default parameters in `config/packages/parameters.yaml`:
