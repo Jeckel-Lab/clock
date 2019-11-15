@@ -1,6 +1,7 @@
 [![Latest Stable Version](https://poser.pugx.org/jeckel-lab/clock/v/stable)](https://packagist.org/packages/jeckel-lab/clock)
 [![Total Downloads](https://poser.pugx.org/jeckel-lab/clock/downloads)](https://packagist.org/packages/jeckel-lab/clock)
 [![Build Status](https://travis-ci.org/jeckel-lab/clock.svg?branch=master)](https://travis-ci.org/jeckel-lab/clock)
+[![codecov](https://codecov.io/gh/jeckel-lab/clock/branch/master/graph/badge.svg)](https://codecov.io/gh/jeckel-lab/clock)
 
 # Clock
 
