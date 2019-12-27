@@ -17,7 +17,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            " Tests\\JeckelLab\\Clock\\": "tests/"
+            "Tests\\JeckelLab\\Clock\\": "tests/"
         }
     },
     "require": {
