@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Tests\JeckelLab\Clock;
@@ -8,12 +9,16 @@ use Exception;
 use JeckelLab\Clock\Clock;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ClockTest
+ * @package Tests\JeckelLab\Clock
+ */
 final class ClockTest extends TestCase
 {
     /**
      * @throws Exception
      */
-    public function testNow()
+    public function testNow(): void
     {
         $now = new DateTimeImmutable('now');
         $clock = new Clock();

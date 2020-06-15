@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace JeckelLab\Clock;
 
 use DateTimeImmutable;
+use JeckelLab\Contract\Infrastructure\System\Clock as ClockInterface;
 
 /**
  * Class FakeClock
