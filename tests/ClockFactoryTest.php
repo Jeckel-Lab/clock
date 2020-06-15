@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Tests\JeckelLab\Clock;
@@ -9,7 +10,6 @@ use JeckelLab\Clock\Clock;
 use JeckelLab\Clock\ClockFactory;
 use JeckelLab\Clock\FakeClock;
 use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\vfsStreamWrapper;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,19 +18,15 @@ use PHPUnit\Framework\TestCase;
  */
 final class ClockFactoryTest extends TestCase
 {
-    /**
-     * @test getClock
-     */
-    public function testGetClock()
+    public function testGetClock(): void
     {
         $this->assertInstanceOf(Clock::class, ClockFactory::getClock());
     }
 
     /**
-     * @test getClock
      * @throws Exception
      */
-    public function testGetFakeClock()
+    public function testGetFakeClock(): void
     {
         $now = new DateTimeImmutable('now');
 
@@ -44,10 +40,9 @@ final class ClockFactoryTest extends TestCase
     }
 
     /**
-     * @test getClock
      * @throws Exception
      */
-    public function testGetFakeClockFromFile()
+    public function testGetFakeClockFromFile(): void
     {
         $frozentime = "2018-02-01 10:30:15";
         $root = vfsStream::setup('root', 444, ['clock' => $frozentime]);

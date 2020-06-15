@@ -6,6 +6,7 @@ namespace JeckelLab\Clock;
 use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
+use JeckelLab\Contract\Infrastructure\System\Clock as ClockInterface;
 
 /**
  * Class Clock

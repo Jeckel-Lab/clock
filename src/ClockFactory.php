@@ -5,6 +5,7 @@ namespace JeckelLab\Clock;
 
 use DateTimeImmutable;
 use Exception;
+use JeckelLab\Contract\Infrastructure\System\Clock as ClockInterface;
 
 /**
  * Class ClockFactory
