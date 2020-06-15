@@ -15,18 +15,18 @@ composer require jeckel-lab/clock
 
 ## Usage
 
-In your code, always use the ClockInterface in your services when you need to access the current time. After that, you just had to define which implementation to use according to your environement (real or fake for tests).
+In your code, always use the `JeckelLab\Contract\Infrastructure\System\Clock` interface in your services when you need to access the current time. After that, you just have to define which implementation to use according to your environment (real or fake for tests).
 
-In some framework, It can be easier to use the factory to handle the switch and inject the require configuration.
+In some framework, it can be easier to use the factory to handle the switch and inject the required configuration.
 
-### Symfony 4
+### Symfony 4 and 5
 
-With SF4 we use the internal DI system with the factory. The factory will get different parameters according to the current environment.
+With SF4 and SF5 we use the internal DI system with the factory. The factory will get different parameters according to the current environment.
 
 Configure DI with a factory in `config/services.yaml`:
 ```yaml
 # config/services.yaml
-    JeckelLab\Clock\ClockInterface:
+    JeckelLab\Contract\Infrastructure\System\Clock:
         factory: ['JeckelLab\Clock\ClockFactory', getClock]
         arguments: ['%fake_clock%', '%fake_clock_file%']
 ```
