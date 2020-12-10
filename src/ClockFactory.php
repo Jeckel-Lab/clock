@@ -25,12 +25,16 @@ class ClockFactory
         if ($fakeClock) {
             if (is_readable($fakeClockFile)) {
                 $clock = file_get_contents($fakeClockFile);
+                if (! is_string($clock)) {
+                    throw new InvalidClockFileException('Unexpected content for clock file: ' . $fakeClockFile);
+                }
+                $clock = trim($clock);
             }
             if (empty($clock)) {
                 $clock = 'now';
             }
 
-            return new FakeClock(new DateTimeImmutable($clock));
+            return new FakeClock(new DateTimeImmutable((string) $clock));
         }
         return new Clock();
     }
