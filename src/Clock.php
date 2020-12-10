@@ -29,11 +29,12 @@ class Clock implements ClockInterface
     }
 
     /**
+     * @param DateTimeZone|null $timezone
      * @return DateTimeImmutable
      * @throws Exception
      */
-    public function now(): DateTimeImmutable
+    public function now(?DateTimeZone $timezone = null): DateTimeImmutable
     {
-        return new DateTimeImmutable('now', $this->timezone);
+        return new DateTimeImmutable('now', $timezone ?: $this->timezone);
     }
 }

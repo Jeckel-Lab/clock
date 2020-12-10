@@ -21,8 +21,8 @@
         }
     },
     "require": {
-        "php": ">=7.2 || ^8.0",
-        "jeckel-lab/contract": "1.0"
+        "php": "^7.3 || ^8.0",
+        "jeckel-lab/contract": "1.1"
     },
     "require-dev": {
         "phpstan/phpstan": "^0.12.0",
