@@ -7,23 +7,23 @@
 
 declare(strict_types=1);
 
-namespace Tests\JeckelLab\Clock;
+namespace Tests\JeckelLab\Clock\Clock;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use JeckelLab\Clock\FakeRunningClock;
+use JeckelLab\Clock\Clock\FakedClock;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class FakeRunningClockTest
  * @package Tests\JeckelLab\Clock
  */
-class FakeRunningClockTest extends TestCase
+class FakedClockTest extends TestCase
 {
     public function testWithPassedFakeTime(): void
     {
         $time = new DateTimeImmutable('2018-01-01 12:00:00');
-        $clock = new FakeRunningClock($time);
+        $clock = new FakedClock($time);
         sleep(1);
         $newTime = $clock->now();
         $this->assertGreaterThan($time, $newTime);
@@ -34,7 +34,7 @@ class FakeRunningClockTest extends TestCase
     public function testWithFutureFakeTime(): void
     {
         $time = (new DateTimeImmutable('2040-01-01 12:00:00'));
-        $clock = new FakeRunningClock($time);
+        $clock = new FakedClock($time);
         sleep(1);
         $newTime = $clock->now();
         $this->assertGreaterThan($time, $newTime);
@@ -43,7 +43,7 @@ class FakeRunningClockTest extends TestCase
 
     public function testTimeZone(): void
     {
-        $clock = new FakeRunningClock(
+        $clock = new FakedClock(
             new DateTimeImmutable('2018-01-01 12:00:00'),
             new DateTimeZone('GMT+2')
         );

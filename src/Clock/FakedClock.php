@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace JeckelLab\Clock;
+namespace JeckelLab\Clock\Clock;
 
 use DateInterval;
 use DateTimeImmutable;
@@ -20,7 +20,7 @@ use JeckelLab\Contract\Infrastructure\System\Clock;
  * Class FakeRunningClock
  * @package JeckelLab\Clock
  */
-class FakeRunningClock implements Clock
+class FakedClock implements Clock
 {
     /** @var DateTimeImmutable */
     protected $initialDatetime;

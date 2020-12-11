@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\JeckelLab\Clock;
+namespace Tests\JeckelLab\Clock\Clock;
 
 use DateTimeZone;
-use JeckelLab\Clock\FakeClock;
+use JeckelLab\Clock\Clock\FrozenClock;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,14 +17,14 @@ final class FakeClockTest extends TestCase
     public function testNow(): void
     {
         $time = new \DateTimeImmutable('2018-01-01 12:00:00');
-        $clock = new FakeClock($time);
+        $clock = new FrozenClock($time);
         $this->assertSame($time, $clock->now());
     }
 
     public function testSetTo(): void
     {
         $time = new \DateTimeImmutable('2018-01-01 12:00:00');
-        $clock = new FakeClock(new \DateTimeImmutable('2016-01-01 12:30:00'));
+        $clock = new FrozenClock(new \DateTimeImmutable('2016-01-01 12:30:00'));
         $clock->setClock($time);
         $this->assertSame($time, $clock->now());
     }
@@ -32,7 +32,7 @@ final class FakeClockTest extends TestCase
     public function testTimezone(): void
     {
         $timezone = new DateTimeZone('Europe/Paris');
-        $clock = new FakeClock(new \DateTimeImmutable('2016-01-01 12:30:00'));
+        $clock = new FrozenClock(new \DateTimeImmutable('2016-01-01 12:30:00'));
         $timeWithTimezone = $clock->now($timezone);
 
         $this->assertSame(
