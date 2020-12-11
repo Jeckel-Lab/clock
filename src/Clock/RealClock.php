@@ -1,18 +1,25 @@
 <?php
+
+/**
+ * @author: Julien Mercier-Rojas <julien@jeckel-lab.fr>
+ * Created at: 19/04/2019
+ */
+
 declare(strict_types=1);
 
-namespace JeckelLab\Clock;
+namespace JeckelLab\Clock\Clock;
 
 use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
+use JeckelLab\Clock\Exception\RuntimeException;
 use JeckelLab\Contract\Infrastructure\System\Clock as ClockInterface;
 
 /**
  * Class Clock
  * @package Jeckel\Clock
  */
-class Clock implements ClockInterface
+class RealClock implements ClockInterface
 {
     /**
      * @var DateTimeZone
@@ -31,10 +38,20 @@ class Clock implements ClockInterface
     /**
      * @param DateTimeZone|null $timezone
      * @return DateTimeImmutable
-     * @throws Exception
+     * @throws RuntimeException
      */
     public function now(?DateTimeZone $timezone = null): DateTimeImmutable
     {
-        return new DateTimeImmutable('now', $timezone ?: $this->timezone);
+        try {
+            return new DateTimeImmutable('now', $timezone ?: $this->timezone);
+            // @codeCoverageIgnoreStart
+        } catch (Exception $e) {
+            throw new RuntimeException(
+                'Error creating datetime: ' . $e->getMessage(),
+                (int) $e->getCode(),
+                $e
+            );
+        }
+        // @codeCoverageIgnoreEnd
     }
 }

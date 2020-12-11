@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Tests\JeckelLab\Clock;
+namespace Tests\JeckelLab\Clock\Clock;
 
 use DateTimeImmutable;
 use Exception;
-use JeckelLab\Clock\Clock;
+use JeckelLab\Clock\Clock\RealClock;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class ClockTest
  * @package Tests\JeckelLab\Clock
  */
-final class ClockTest extends TestCase
+final class RealClockTest extends TestCase
 {
     /**
      * @throws Exception
@@ -21,7 +21,7 @@ final class ClockTest extends TestCase
     public function testNow(): void
     {
         $now = new DateTimeImmutable('now');
-        $clock = new Clock();
+        $clock = new RealClock();
         $time = $clock->now();
         $this->assertGreaterThanOrEqual($now, $time);
         $this->assertLessThanOrEqual(new DateTimeImmutable('now'), $time);
@@ -33,13 +33,13 @@ final class ClockTest extends TestCase
     public function testNowOnClockWithTimezone(): void
     {
         $timeZone = new \DateTimeZone("Europe/Paris");
-        $clock = new Clock($timeZone);
+        $clock = new RealClock($timeZone);
         $time = $clock->now();
         $this->assertEquals($timeZone->getName(), $time->getTimezone()->getName());
     }
 
     public function testDefaultTimeZone(): void
     {
-        $this->assertEquals(date_default_timezone_get(), (new Clock)->now()->getTimezone()->getName());
+        $this->assertEquals(date_default_timezone_get(), (new RealClock)->now()->getTimezone()->getName());
     }
 }

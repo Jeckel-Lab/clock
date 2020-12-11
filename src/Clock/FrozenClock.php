@@ -1,7 +1,13 @@
 <?php
+
+/**
+ * @author: Julien Mercier-Rojas <julien@jeckel-lab.fr>
+ * Created at: 19/04/2019
+ */
+
 declare(strict_types=1);
 
-namespace JeckelLab\Clock;
+namespace JeckelLab\Clock\Clock;
 
 use DateTimeImmutable;
 use DateTimeZone;
@@ -11,7 +17,7 @@ use JeckelLab\Contract\Infrastructure\System\Clock as ClockInterface;
  * Class FakeClock
  * @package Jeckel\Clock
  */
-class FakeClock implements ClockInterface
+class FrozenClock implements ClockInterface
 {
     /**
      * @var DateTimeImmutable
