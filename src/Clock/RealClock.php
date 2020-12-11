@@ -44,14 +44,14 @@ class RealClock implements ClockInterface
     {
         try {
             return new DateTimeImmutable('now', $timezone ?: $this->timezone);
-        } catch (Exception $e) {
             // @codeCoverageIgnoreStart
+        } catch (Exception $e) {
             throw new RuntimeException(
                 'Error creating datetime: ' . $e->getMessage(),
                 (int) $e->getCode(),
                 $e
             );
-            // @codeCoverageIgnoreEnd
         }
+        // @codeCoverageIgnoreEnd
     }
 }

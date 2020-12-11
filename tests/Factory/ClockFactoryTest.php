@@ -8,6 +8,7 @@ use Exception;
 use JeckelLab\Clock\Clock\FakedClock;
 use JeckelLab\Clock\Clock\FrozenClock;
 use JeckelLab\Clock\Clock\RealClock;
+use JeckelLab\Clock\Exception\RuntimeException;
 use JeckelLab\Clock\Factory\ClockFactory;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
@@ -72,5 +73,30 @@ final class ClockFactoryTest extends TestCase
             ]
         );
         $this->assertEquals($frozenTime, $clock->now()->format('Y-m-d H:i:s'));
+    }
+
+    public function testGetFakeClockWithoutInitialValue(): void
+    {
+        $this->expectException(RuntimeException::class);
+        ClockFactory::getClock(['mode' => 'frozen']);
+    }
+
+    public function testGetFakeClockWithInvalidInitialValue(): void
+    {
+        $this->expectException(RuntimeException::class);
+        ClockFactory::getClock(['mode' => 'frozen', 'fake_time_init' => 'foobarbaz']);
+    }
+
+    public function testGetFakeClockWithUnreadableFile(): void
+    {
+        $this->expectException(RuntimeException::class);
+        ClockFactory::getClock(['mode' => 'frozen', 'fake_time_path' => '/foo/bar/baz']);
+    }
+
+    public function testGetFakeClockWithInvalidInitFileContent(): void
+    {
+        $root = vfsStream::setup('root', 444, ['clock' => 'foobarbaz']);
+        $this->expectException(RuntimeException::class);
+        ClockFactory::getClock(['mode' => 'frozen', 'fake_time_path' => $root->url() . '/clock']);
     }
 }
