@@ -49,11 +49,13 @@ class FakedClock implements Clock
         try {
             $this->diff = (new DateTimeImmutable('now', $this->timezone))->diff($initialDatetime);
         } catch (Exception $e) {
+            // @codeCoverageIgnoreStart
             throw new RuntimeException(
                 'Error creating diff to fake clock: ' . $e->getMessage(),
                 (int) $e->getCode(),
                 $e
             );
+            // @codeCoverageIgnoreEnd
         }
     }
 
@@ -67,11 +69,13 @@ class FakedClock implements Clock
         try {
             return (new DateTimeImmutable('now', $timezone ?: $this->timezone))->add($this->diff);
         } catch (Exception $e) {
+            // @codeCoverageIgnoreStart
             throw new RuntimeException(
                 'Error creating current time: ' . $e->getMessage(),
                 (int) $e->getCode(),
                 $e
             );
+            // @codeCoverageIgnoreEnd
         }
     }
 }

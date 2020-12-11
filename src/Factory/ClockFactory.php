@@ -75,26 +75,4 @@ class ClockFactory
         }
         throw new RuntimeException('Missing configuration options for fake time: fake_time_init or fake_time_path');
     }
-
-//    /**
-//     * @param bool   $fakeClock
-//     * @param string $fakeClockFile
-//     * @return ClockInterface
-//     * @throws Exception
-//     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
-//     */
-//    public static function getClock(bool $fakeClock = false, string $fakeClockFile = ''): ClockInterface
-//    {
-//        if ($fakeClock) {
-//            if (is_readable($fakeClockFile)) {
-//                $clock = file_get_contents($fakeClockFile);
-//            }
-//            if (empty($clock)) {
-//                $clock = 'now';
-//            }
-//
-//            return new FakeClock(new DateTimeImmutable((string) $clock));
-//        }
-//        return new Clock();
-//    }
 }
