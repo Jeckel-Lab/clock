@@ -30,7 +30,7 @@ class ClockFactory
                 $clock = 'now';
             }
 
-            return new FakeClock(new DateTimeImmutable($clock));
+            return new FakeClock(new DateTimeImmutable((string) $clock));
         }
         return new Clock();
     }

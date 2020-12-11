@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace JeckelLab\Clock;
 
 use DateTimeImmutable;
+use DateTimeZone;
 use JeckelLab\Contract\Infrastructure\System\Clock as ClockInterface;
 
 /**
@@ -35,10 +36,14 @@ class FakeClock implements ClockInterface
     }
 
     /**
+     * @param DateTimeZone|null $timezone
      * @return DateTimeImmutable
      */
-    public function now(): DateTimeImmutable
+    public function now(?DateTimeZone $timezone = null): DateTimeImmutable
     {
+        if (null !== $timezone) {
+            return $this->now->setTimezone($timezone);
+        }
         return $this->now;
     }
 }

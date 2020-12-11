@@ -8,3 +8,4 @@
 # Temporary files
 /.phpunit.result.cache
 /coverage.xml
+/.phpcs-cache

@@ -29,4 +29,17 @@ final class ClockTest extends TestCase
         // 2nd call return a new DateTimeImmutable
         $this->assertNotSame($time, $clock->now());
     }
+
+    public function testNowOnClockWithTimezone(): void
+    {
+        $timeZone = new \DateTimeZone("Europe/Paris");
+        $clock = new Clock($timeZone);
+        $time = $clock->now();
+        $this->assertEquals($timeZone->getName(), $time->getTimezone()->getName());
+    }
+
+    public function testDefaultTimeZone(): void
+    {
+        $this->assertEquals(date_default_timezone_get(), (new Clock)->now()->getTimezone()->getName());
+    }
 }
