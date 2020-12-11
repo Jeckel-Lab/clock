@@ -75,6 +75,13 @@ final class ClockFactoryTest extends TestCase
         $this->assertEquals($frozenTime, $clock->now()->format('Y-m-d H:i:s'));
     }
 
+    public function testGetClockWithInitialTimezone(): void
+    {
+        $this->expectException(RuntimeException::class);
+        ClockFactory::getClock(['timezone' => 'foobarbaz']);
+    }
+
+
     public function testGetFakeClockWithoutInitialValue(): void
     {
         $this->expectException(RuntimeException::class);
