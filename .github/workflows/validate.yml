@@ -27,6 +27,8 @@ jobs:
           key: ${{ runner.os }}-php-7.4-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-7.4
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --dev
       - name: php MD
         run: ./vendor/bin/phpmd src text ./ruleset.xml
       - name: php CD
