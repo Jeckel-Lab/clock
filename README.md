@@ -65,3 +65,50 @@ parameters:
         mode: frozen
         fake_time_path: '%kernel.project_dir%/var/fake_time.txt'
 ```
+
+## Test with Codeception
+
+To be able to change current date in your Codeception tests, you first need to configure your fake clock to use the `fake_time_path` file as a time source.
+
+Next, configure codeception with the provided helper:
+
+```yaml
+# codeception.yaml
+
+# ...
+modules:
+    config:
+        \JeckelLab\Clock\CodeceptionHelper\Clock:
+            fake_time_path: 'var/test/fake_clock'   # Required: path where the fake time should be provided to your project
+            date_format: 'Y/m/d'  # Optional, date format for date value defined in your tests (default: Y/m/d)
+            time_format: 'H:i:s'  # Optional, time format for time value defined in your tests (default: H:i:s)
+```
+
+Enable the helper in your suite:
+```yaml
+# acceptance.suite.yml
+
+actor: AcceptanceTester
+modules:
+    enabled:
+        - \JeckelLab\Clock\CodeceptionHelper\Clock
+```
+
+Now you can set the fake time in your tests:
+
+**in BDD:**
+```gherkin
+Feature: A feature description
+
+  Scenario: A scenario description
+    Given current date is "2021/03/26" and time is "08:35:00"
+```
+
+**in other tests:**
+```php
+/** @var \Codeception\Actor $i */
+$I->haveCurrentDateAndTime('2021/03/26', '08:35:00');
+
+// or
+$I->haveCurrentDateTime(DateTime::createFromFormat("Y/m/d H:i", "2021/03/26 08:35"));
+```
