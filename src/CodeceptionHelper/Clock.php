@@ -12,6 +12,7 @@ namespace JeckelLab\Clock\CodeceptionHelper;
 use Codeception\Configuration;
 use Codeception\Module;
 use Codeception\TestInterface;
+use Codeception\Util\Fixtures;
 use DateTimeImmutable;
 use DateTimeInterface;
 use InvalidArgumentException;
@@ -23,6 +24,8 @@ use RuntimeException;
  */
 class Clock extends Module
 {
+    public const FIXTURE_CURRENT_DATETIME = '_clock_current_datetime';
+
     /**
      * @var string[]
      */
@@ -45,6 +48,7 @@ class Clock extends Module
     public function _before(TestInterface $test): void
     {
         $this->haveCurrentDateTime(new DateTimeImmutable());
+        Fixtures::cleanup(self::FIXTURE_CURRENT_DATETIME);
     }
     // @codingStandardsIgnoreEnd
 
@@ -64,9 +68,9 @@ class Clock extends Module
     }
 
     /**
-     * @param DateTimeInterface $dateTime
+     * @param DateTimeImmutable $dateTime
      */
-    public function haveCurrentDateTime(DateTimeInterface $dateTime): void
+    public function haveCurrentDateTime(DateTimeImmutable $dateTime): void
     {
         $fullPath = Configuration::projectDir() . $this->config['fake_time_path'];
 
@@ -75,5 +79,19 @@ class Clock extends Module
             throw new RuntimeException(sprintf('Directory "%s" was not created', $dir));
         }
         file_put_contents($fullPath, $dateTime->format('Y-m-d H:i:s'));
+        Fixtures::add(self::FIXTURE_CURRENT_DATETIME, $dateTime);
+    }
+
+    /**
+     * @return DateTimeImmutable|null
+     */
+    public function getDefinedCurrentDateTime(): ?DateTimeImmutable
+    {
+        if (Fixtures::exists(self::FIXTURE_CURRENT_DATETIME)) {
+            /** @var DateTimeImmutable $dateTime */
+            $dateTime = Fixtures::get(self::FIXTURE_CURRENT_DATETIME);
+            return $dateTime;
+        }
+        return null;
     }
 }
