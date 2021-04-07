@@ -63,7 +63,7 @@ or
 parameters:
     clock:
         mode: frozen
-        fake_time_path: '%kernel.project_dir%/var/fake_time.txt'
+        fake_time_path: '%kernel.project_dir%/var/test/fake_clock'
         fallback_to_current_date: true # Default: false, if true and file is not found or has invalid valid, then fallback to RealClock
 ```
 
