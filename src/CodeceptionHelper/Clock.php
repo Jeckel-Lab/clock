@@ -28,6 +28,7 @@ class Clock extends Module
 
     /**
      * @var string[]
+     * @psalm-suppress NonInvariantDocblockPropertyType
      */
     protected $config = [
         'date_format' => 'Y/m/d',
@@ -36,6 +37,7 @@ class Clock extends Module
 
     /**
      * @var array
+     * @psalm-suppress NonInvariantDocblockPropertyType
      */
     protected $requiredFields = ['fake_time_path', 'date_format', 'time_format'];
 
