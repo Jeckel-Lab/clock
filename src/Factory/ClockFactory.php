@@ -9,6 +9,7 @@ use Exception;
 use JeckelLab\Clock\Clock\FakedClock;
 use JeckelLab\Clock\Clock\FrozenClock;
 use JeckelLab\Clock\Clock\RealClock;
+use JeckelLab\Clock\Exception\InvalidFakeClockInitialValueException;
 use JeckelLab\Clock\Exception\RuntimeException;
 use JeckelLab\Contract\Infrastructure\System\Clock as ClockInterface;
 
@@ -37,14 +38,21 @@ class ClockFactory
             );
         }
 
-        switch ($config['mode'] ?? '') {
-            case 'frozen':
-                return new FrozenClock(self::getInitialTimeFromConfig($config));
-            case 'faked':
-                return new FakedClock(self::getInitialTimeFromConfig($config), $timezone);
-            case 'real':
-            default:
+        try {
+            switch ($config['mode'] ?? '') {
+                case 'frozen':
+                    return new FrozenClock(self::getInitialTimeFromConfig($config));
+                case 'faked':
+                    return new FakedClock(self::getInitialTimeFromConfig($config), $timezone);
+                case 'real':
+                default:
+                    return new RealClock($timezone);
+            }
+        } catch (InvalidFakeClockInitialValueException $e) {
+            if (isset($config['fallback_to_current_date']) && $config['fallback_to_current_date'] === true) {
                 return new RealClock($timezone);
+            }
+            throw $e;
         }
     }
 
@@ -62,12 +70,12 @@ class ClockFactory
             if (isset($config['fake_time_path'])) {
                 $filePath = (string) $config['fake_time_path'];
                 if (! is_readable($filePath)) {
-                    throw new Exception('Impossible to read fake time file: ' . $filePath);
+                    throw new InvalidFakeClockInitialValueException('Impossible to read fake time file: ' . $filePath);
                 }
                 return new DateTimeImmutable(file_get_contents($filePath));
             }
         } catch (Exception $e) {
-            throw new RuntimeException(
+            throw new InvalidFakeClockInitialValueException(
                 'Invalid fake time provided: ' . $e->getMessage(),
                 (int) $e->getCode(),
                 $e
