@@ -81,6 +81,7 @@ class Clock extends Module
             throw new RuntimeException(sprintf('Directory "%s" was not created', $dir));
         }
         file_put_contents($fullPath, $dateTime->format('Y-m-d H:i:s'));
+        $this->debug(sprintf('[Date] Set fake time %s in file %s', $dateTime->format('Y-m-d H:i:s'), $fullPath));
         Fixtures::add(self::FIXTURE_CURRENT_DATETIME, $dateTime);
     }
 
