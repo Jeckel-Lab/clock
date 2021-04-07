@@ -46,7 +46,7 @@ Configure default parameters in `config/packages/parameters.yaml`:
 parameters:
     clock:
         mode: real
-        timezone: Europe/Paris
+        timezone: Europe/Paris  # Optional
 ```
 
 And then configure parameters for **tests** environment in `config/packages/test/parameters.yaml`:
@@ -64,6 +64,7 @@ parameters:
     clock:
         mode: frozen
         fake_time_path: '%kernel.project_dir%/var/fake_time.txt'
+        fallback_to_current_date: true # Default: false, if true and file is not found or has invalid valid, then fallback to RealClock
 ```
 
 ## Test with Codeception

@@ -100,6 +100,20 @@ final class ClockFactoryTest extends TestCase
         ClockFactory::getClock(['mode' => 'frozen', 'fake_time_path' => '/foo/bar/baz']);
     }
 
+    public function testGetFakeClockWithUnreadableFileAndFallbackToCurrentDate(): void
+    {
+        self::assertInstanceOf(
+            RealClock::class,
+            ClockFactory::getClock(
+                [
+                    'mode' => 'frozen',
+                    'fake_time_path' => '/foo/bar/baz',
+                    'fallback_to_current_date' => true
+                ]
+            )
+        );
+    }
+
     public function testGetFakeClockWithInvalidInitFileContent(): void
     {
         $root = vfsStream::setup('root', 444, ['clock' => 'foobarbaz']);
