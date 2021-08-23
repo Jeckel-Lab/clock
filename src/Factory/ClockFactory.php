@@ -41,7 +41,7 @@ class ClockFactory
         try {
             switch ($config['mode'] ?? '') {
                 case 'frozen':
-                    return new FrozenClock(self::getInitialTimeFromConfig($config));
+                    return new FrozenClock(self::getInitialTimeFromConfig($config), $timezone);
                 case 'faked':
                     return new FakedClock(self::getInitialTimeFromConfig($config), $timezone);
                 case 'real':

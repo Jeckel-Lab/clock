@@ -27,10 +27,17 @@ class FrozenClock implements ClockInterface
     /**
      * FakeClock constructor.
      * @param DateTimeImmutable $now
+     * @param DateTimeZone|null $timezone
      */
-    public function __construct(DateTimeImmutable $now)
+    public function __construct(DateTimeImmutable $now, ?DateTimeZone $timezone = null)
     {
-        $this->now = $now;
+        $initialDatetime = $now;
+
+        if (null !== $timezone) {
+            $initialDatetime = $now->setTimezone($timezone);
+        }
+
+        $this->now = $initialDatetime;
     }
 
     /**
