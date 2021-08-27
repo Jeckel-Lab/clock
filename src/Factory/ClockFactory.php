@@ -41,7 +41,7 @@ class ClockFactory
         try {
             switch ($config['mode'] ?? '') {
                 case 'frozen':
-                    return new FrozenClock(self::getInitialTimeFromConfig($config), $timezone);
+                    return new FrozenClock(self::getInitialTimeFromConfig($config, $timezone), $timezone);
                 case 'faked':
                     return new FakedClock(self::getInitialTimeFromConfig($config), $timezone);
                 case 'real':
@@ -61,7 +61,7 @@ class ClockFactory
      * @return DateTimeImmutable
      * @throws RuntimeException
      */
-    protected static function getInitialTimeFromConfig(array $config): DateTimeImmutable
+    protected static function getInitialTimeFromConfig(array $config, ?DateTimeZone $timezone = null): DateTimeImmutable
     {
         try {
             if (isset($config['fake_time_init'])) {
@@ -72,7 +72,7 @@ class ClockFactory
                 if (! is_readable($filePath)) {
                     throw new InvalidFakeClockInitialValueException('Impossible to read fake time file: ' . $filePath);
                 }
-                return new DateTimeImmutable(file_get_contents($filePath));
+                return new DateTimeImmutable(file_get_contents($filePath), $timezone);
             }
         } catch (Exception $e) {
             throw new InvalidFakeClockInitialValueException(
