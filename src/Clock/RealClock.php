@@ -54,4 +54,12 @@ class RealClock implements ClockInterface
         }
         // @codeCoverageIgnoreEnd
     }
+
+    /**
+     * @return DateTimeZone
+     */
+    public function getTimeZone(): DateTimeZone
+    {
+        return $this->timezone;
+    }
 }

@@ -11,57 +11,65 @@ use JeckelLab\Clock\Clock\RealClock;
 use JeckelLab\Clock\Exception\RuntimeException;
 use JeckelLab\Clock\Factory\ClockFactory;
 use org\bovigo\vfs\vfsStream;
-use PHPUnit\Framework\TestCase;
+use Tests\JeckelLab\Clock\ClockTestCase;
 
 /**
  * Class ClockFactoryTest
  * @package Test\Jeckel\Clock
  */
-final class ClockFactoryTest extends TestCase
+final class ClockFactoryTest extends ClockTestCase
 {
-    public function testGetClock(): void
+
+    /***** Real Clock Factory *****/
+
+    public function testGetDefaultClockIsRealClock(): void
     {
-        $this->assertInstanceOf(RealClock::class, ClockFactory::getClock());
+        $this->assertInstanceOf(
+            RealClock::class,
+            ClockFactory::getClock()
+        );
     }
+
+    public function testGetRealClock(): void
+    {
+        $this->assertInstanceOf(
+            RealClock::class,
+            ClockFactory::getClock(['mode' => 'real'])
+        );
+    }
+
+    /***** Frozen Clock Factory *****/
 
     public function testGetFrozenClock(): void
     {
-        $clock = ClockFactory::getClock(['mode' => 'frozen', 'fake_time_init' => '2018-12-01 06:00:00']);
+        $clock = ClockFactory::getClock([
+            'mode' => 'frozen',
+            'fake_time_init' => '2018-12-01 06:00:00'
+        ]);
         $this->assertInstanceOf(FrozenClock::class, $clock);
 
-        $time = $clock->now();
-        $this->assertEquals('2018-12-01 06:00:00', $time->format('Y-m-d H:i:s'));
+        $now = $clock->now();
+        $this->assertEquals('2018-12-01 06:00:00', $now->format('Y-m-d H:i:s'));
+        $this->assertHasDefaultTimeZone($now);
     }
 
-    public function testGetFakedClock(): void
+    public function testGetFrozenClockWithTimeZone(): void
     {
-        $clock = ClockFactory::getClock(['mode' => 'faked', 'fake_time_init' => '2018-12-01 06:00:00']);
-        $this->assertInstanceOf(FakedClock::class, $clock);
+        $expectedTimeZone = new \DateTimeZone('Europe/Paris');
 
-        sleep(1);
-        $time = $clock->now();
-        $this->assertEquals('2018-12-01 06:00:01', $time->format('Y-m-d H:i:s'));
+        $clock = ClockFactory::getClock([
+            'mode' => 'frozen',
+            'fake_time_init' => '2018-12-01 06:00:00',
+            'timezone' => 'Europe/Paris'
+        ]);
+        $this->assertInstanceOf(FrozenClock::class, $clock);
+
+        $now = $clock->now();
+        $this->assertEqualsTimeZone($expectedTimeZone, $clock->getTimeZone());
+        $this->assertEquals('2018-12-01 06:00:00', $now->format('Y-m-d H:i:s'));
+        $this->assertDateTimeHasTimeZone($expectedTimeZone, $now);
     }
 
-    public function testGetFakedClockWithTimeZone(): void
-    {
-        $clock = ClockFactory::getClock(
-            [
-                'mode'           => 'faked',
-                'fake_time_init' => '2018-12-01 06:00:00',
-                'timezone'       => 'GMT+2'
-            ]
-        );
-        $this->assertInstanceOf(FakedClock::class, $clock);
-
-        sleep(1);
-        $time = $clock->now();
-        $this->assertEquals('2018-12-01 08:00:01', $time->format('Y-m-d H:i:s'));
-    }
-
-    /**
-     * @throws Exception
-     */
     public function testGetFrozenClockFromFile(): void
     {
         $frozenTime = "2018-02-01 10:30:15";
@@ -72,35 +80,154 @@ final class ClockFactoryTest extends TestCase
                 'fake_time_path' => $root->url() . '/clock'
             ]
         );
-        $this->assertEquals($frozenTime, $clock->now()->format('Y-m-d H:i:s'));
+        $this->assertInstanceOf(FrozenClock::class, $clock);
+
+        $now = $clock->now();
+        $this->assertEquals($frozenTime, $now->format('Y-m-d H:i:s'));
+        $this->assertHasDefaultTimeZone($now);
     }
 
-    public function testGetClockWithInitialTimezone(): void
+    public function testGetFrozenClockFromFileWithTimeZone(): void
+    {
+        $expectedTimeZone = new \DateTimeZone('Europe/Paris');
+        $frozenTime = "2018-02-01 10:30:15";
+        $root = vfsStream::setup('root', 444, ['clock' => $frozenTime]);
+        $clock = ClockFactory::getClock(
+            [
+                'mode' => 'frozen',
+                'fake_time_path' => $root->url() . '/clock',
+                'timezone' => 'Europe/Paris'
+            ]
+        );
+        $this->assertInstanceOf(FrozenClock::class, $clock);
+        $this->assertEqualsTimeZone($expectedTimeZone, $clock->getTimeZone());
+
+        $now = $clock->now();
+        $this->assertEquals($frozenTime, $now->format('Y-m-d H:i:s'));
+        $this->assertDateTimeHasTimeZone($expectedTimeZone, $now);
+    }
+
+    /***** Faked Clock Factory *****/
+
+    public function testGetFakedClock(): void
+    {
+        $clock = ClockFactory::getClock([
+            'mode' => 'faked',
+            'fake_time_init' => '2018-12-01 06:00:00'
+        ]);
+        $this->assertInstanceOf(FakedClock::class, $clock);
+        $this->assertIsDefaultTimeZone($clock->getTimeZone());
+
+        sleep(1);
+        $now = $clock->now();
+        $this->assertEquals('2018-12-01 06:00:01', $now->format('Y-m-d H:i:s'));
+        $this->assertHasDefaultTimeZone($now);
+    }
+
+    public function testGetFakedClockWithTimeZone(): void
+    {
+        $expectedTimeZone = new \DateTimeZone('Europe/Paris');
+        $clock = ClockFactory::getClock(
+            [
+                'mode'           => 'faked',
+                'fake_time_init' => '2018-12-01 06:00:00',
+                'timezone'       => 'Europe/Paris'
+            ]
+        );
+        $this->assertInstanceOf(FakedClock::class, $clock);
+        $this->assertEqualsTimeZone($expectedTimeZone, $clock->getTimeZone());
+
+        sleep(1);
+        $now = $clock->now();
+        $this->assertEquals('2018-12-01 06:00:01', $now->format('Y-m-d H:i:s'));
+        $this->assertDateTimeHasTimeZone($expectedTimeZone, $now);
+    }
+
+    public function testGetFakedClockFromFile(): void
+    {
+        $fakeTimeInit = "2018-02-01 10:30:15";
+        $root = vfsStream::setup('root', 444, ['clock' => $fakeTimeInit]);
+        $clock = ClockFactory::getClock(
+            [
+                'mode' => 'faked',
+                'fake_time_path' => $root->url() . '/clock'
+            ]
+        );
+        $this->assertInstanceOf(FakedClock::class, $clock);
+
+        sleep(1);
+        $now = $clock->now();
+        $this->assertEquals("2018-02-01 10:30:16", $now->format('Y-m-d H:i:s'));
+        $this->assertHasDefaultTimeZone($now);
+    }
+
+    public function testGetFakedClockFromFileWithTimeZone(): void
+    {
+        $expectedTimeZone = new \DateTimeZone('Europe/Paris');
+        $fakeTimeInit = "2018-02-01 10:30:15";
+        $root = vfsStream::setup('root', 444, ['clock' => $fakeTimeInit]);
+        $clock = ClockFactory::getClock(
+            [
+                'mode' => 'faked',
+                'fake_time_path' => $root->url() . '/clock',
+                'timezone' => 'Europe/Paris'
+            ]
+        );
+        $this->assertInstanceOf(FakedClock::class, $clock);
+        $this->assertEqualsTimeZone($expectedTimeZone, $clock->getTimeZone());
+
+        sleep(1);
+        $now = $clock->now();
+        $this->assertEquals("2018-02-01 10:30:16", $now->format('Y-m-d H:i:s'));
+        $this->assertDateTimeHasTimeZone($expectedTimeZone, $now);
+    }
+
+
+    /***** Test error cases *****/
+
+    public function testGetClockWithInvalidTimezoneFailed(): void
     {
         $this->expectException(RuntimeException::class);
         ClockFactory::getClock(['timezone' => 'foobarbaz']);
     }
 
-
-    public function testGetFakeClockWithoutInitialValue(): void
+    public function testGetFrozenClockWithoutInitialValueFailed(): void
     {
         $this->expectException(RuntimeException::class);
         ClockFactory::getClock(['mode' => 'frozen']);
     }
 
-    public function testGetFakeClockWithInvalidInitialValue(): void
+    public function testGetFakedClockWithoutInitialValueFailed(): void
+    {
+        $this->expectException(RuntimeException::class);
+        ClockFactory::getClock(['mode' => 'faked']);
+    }
+
+    public function testGetFrozenClockWithInvalidInitialValueFailed(): void
     {
         $this->expectException(RuntimeException::class);
         ClockFactory::getClock(['mode' => 'frozen', 'fake_time_init' => 'foobarbaz']);
     }
 
-    public function testGetFakeClockWithUnreadableFile(): void
+    public function testGetFakedClockWithInvalidInitialValueFailed(): void
+    {
+        $this->expectException(RuntimeException::class);
+        ClockFactory::getClock(['mode' => 'faked', 'fake_time_init' => 'foobarbaz']);
+    }
+
+    public function testGetFrozenClockWithUnreadableFile(): void
     {
         $this->expectException(RuntimeException::class);
         ClockFactory::getClock(['mode' => 'frozen', 'fake_time_path' => '/foo/bar/baz']);
     }
 
-    public function testGetFakeClockWithUnreadableFileAndFallbackToCurrentDate(): void
+    public function testGetFakedClockWithUnreadableFile(): void
+    {
+        $this->expectException(RuntimeException::class);
+        ClockFactory::getClock(['mode' => 'faked', 'fake_time_path' => '/foo/bar/baz']);
+    }
+
+    public function testGetFrozenClockWithUnreadableFileAndFallbackToCurrentDate(): void
     {
         self::assertInstanceOf(
             RealClock::class,
@@ -114,10 +241,31 @@ final class ClockFactoryTest extends TestCase
         );
     }
 
-    public function testGetFakeClockWithInvalidInitFileContent(): void
+    public function testGetFakedClockWithUnreadableFileAndFallbackToCurrentDate(): void
+    {
+        self::assertInstanceOf(
+            RealClock::class,
+            ClockFactory::getClock(
+                [
+                    'mode' => 'faked',
+                    'fake_time_path' => '/foo/bar/baz',
+                    'fallback_to_current_date' => true
+                ]
+            )
+        );
+    }
+
+    public function testGetFrozenClockWithInvalidInitFileContent(): void
     {
         $root = vfsStream::setup('root', 444, ['clock' => 'foobarbaz']);
         $this->expectException(RuntimeException::class);
         ClockFactory::getClock(['mode' => 'frozen', 'fake_time_path' => $root->url() . '/clock']);
+    }
+
+    public function testGetFakedClockWithInvalidInitFileContent(): void
+    {
+        $root = vfsStream::setup('root', 444, ['clock' => 'foobarbaz']);
+        $this->expectException(RuntimeException::class);
+        ClockFactory::getClock(['mode' => 'faked', 'fake_time_path' => $root->url() . '/clock']);
     }
 }

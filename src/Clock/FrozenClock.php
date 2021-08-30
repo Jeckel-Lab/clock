@@ -11,6 +11,8 @@ namespace JeckelLab\Clock\Clock;
 
 use DateTimeImmutable;
 use DateTimeZone;
+use JeckelLab\Clock\Exception\InvalidFakeClockInitialValueException;
+use JeckelLab\Clock\Exception\RuntimeException;
 use JeckelLab\Contract\Infrastructure\System\Clock as ClockInterface;
 
 /**
@@ -24,13 +26,27 @@ class FrozenClock implements ClockInterface
      */
     protected $now;
 
+    /** @var DateTimeZone */
+    private $timezone;
+
     /**
      * FakeClock constructor.
-     * @param DateTimeImmutable $now
+     * @param DateTimeImmutable $initialDatetime
+     * @param DateTimeZone|null $timezone
      */
-    public function __construct(DateTimeImmutable $now)
+    public function __construct(DateTimeImmutable $initialDatetime, ?DateTimeZone $timezone = null)
     {
-        $this->now = $now;
+        $this->timezone = $timezone ?: $initialDatetime->getTimezone();
+
+        if ($initialDatetime->getTimezone()->getName() !== $this->timezone->getName()) {
+            $fixedDateTime = $initialDatetime->setTimezone($this->timezone);
+            if (! $fixedDateTime instanceof DateTimeImmutable) {
+                throw new RuntimeException('Error setting timezone');
+            }
+            $initialDatetime = $fixedDateTime;
+        }
+
+        $this->now = $initialDatetime;
     }
 
     /**
@@ -38,7 +54,12 @@ class FrozenClock implements ClockInterface
      */
     public function setClock(DateTimeImmutable $now): void
     {
-        $this->now = $now;
+        $newNow = DateTimeImmutable::createFromFormat('U', $now->format('U'));
+        if (! $newNow instanceof DateTimeImmutable) {
+            throw new RuntimeException('Error creating new date');
+        }
+
+        $this->now = $newNow->setTimezone($this->timezone);
     }
 
     /**
@@ -51,5 +72,13 @@ class FrozenClock implements ClockInterface
             return $this->now->setTimezone($timezone);
         }
         return $this->now;
+    }
+
+    /**
+     * @return DateTimeZone
+     */
+    public function getTimeZone(): DateTimeZone
+    {
+        return $this->timezone;
     }
 }
