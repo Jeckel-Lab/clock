@@ -40,9 +40,11 @@ class FrozenClock implements ClockInterface
 
         if ($initialDatetime->getTimezone()->getName() !== $this->timezone->getName()) {
             $fixedDateTime = $initialDatetime->setTimezone($this->timezone);
+            // @codeCoverageIgnoreStart
             if (! $fixedDateTime instanceof DateTimeImmutable) {
                 throw new RuntimeException('Error setting timezone');
             }
+            // @codeCoverageIgnoreEnd
             $initialDatetime = $fixedDateTime;
         }
 
@@ -55,9 +57,11 @@ class FrozenClock implements ClockInterface
     public function setClock(DateTimeImmutable $now): void
     {
         $newNow = DateTimeImmutable::createFromFormat('U', $now->format('U'));
+        // @codeCoverageIgnoreStart
         if (! $newNow instanceof DateTimeImmutable) {
             throw new RuntimeException('Error creating new date');
         }
+        // @codeCoverageIgnoreEnd
 
         $this->now = $newNow->setTimezone($this->timezone);
     }
