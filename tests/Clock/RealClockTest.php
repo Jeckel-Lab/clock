@@ -8,13 +8,27 @@ use DateTimeImmutable;
 use Exception;
 use JeckelLab\Clock\Clock\RealClock;
 use PHPUnit\Framework\TestCase;
+use Tests\JeckelLab\Clock\ClockTestCase;
 
 /**
  * Class ClockTest
  * @package Tests\JeckelLab\Clock
  */
-final class RealClockTest extends TestCase
+final class RealClockTest extends ClockTestCase
 {
+    public function testConstructorWithoutTimeZone(): void
+    {
+        $clock = new RealClock();
+        $this->assertIsDefaultTimeZone($clock->getTimeZone());
+    }
+
+    public function testConstructorWithTimeZone(): void
+    {
+        $timeZone = new \DateTimeZone('Europe/Paris');
+        $clock = new RealClock($timeZone);
+        $this->assertEqualsTimeZone($timeZone, $clock->getTimeZone());
+    }
+
     /**
      * @throws Exception
      */
@@ -23,8 +37,10 @@ final class RealClockTest extends TestCase
         $now = new DateTimeImmutable('now');
         $clock = new RealClock();
         $time = $clock->now();
+
         $this->assertGreaterThanOrEqual($now, $time);
         $this->assertLessThanOrEqual(new DateTimeImmutable('now'), $time);
+        $this->assertHasDefaultTimeZone($time);
 
         // 2nd call return a new DateTimeImmutable
         $this->assertNotSame($time, $clock->now());
@@ -35,11 +51,15 @@ final class RealClockTest extends TestCase
         $timeZone = new \DateTimeZone("Europe/Paris");
         $clock = new RealClock($timeZone);
         $time = $clock->now();
-        $this->assertEquals($timeZone->getName(), $time->getTimezone()->getName());
+        $this->assertDateTimeHasTimeZone($timeZone, $time);
     }
 
-    public function testDefaultTimeZone(): void
+    public function testNowWithSpecifiedTimeZone(): void
     {
-        $this->assertEquals(date_default_timezone_get(), (new RealClock)->now()->getTimezone()->getName());
+        $timeZone = new \DateTimeZone("Europe/Paris");
+        $clock = new RealClock($timeZone);
+        $expectedTimeZone = new \DateTimeZone("America/New_York");
+        $time = $clock->now($expectedTimeZone);
+        $this->assertDateTimeHasTimeZone($expectedTimeZone, $time);
     }
 }

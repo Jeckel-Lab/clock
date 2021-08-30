@@ -39,10 +39,12 @@ class FakedClock implements Clock
      */
     public function __construct(DateTimeImmutable $initialDatetime, ?DateTimeZone $timezone = null)
     {
-        $this->timezone = $timezone ?: new DateTimeZone(date_default_timezone_get());
+        $this->timezone = $timezone ?: $initialDatetime->getTimezone();
 
         if ($initialDatetime->getTimezone()->getName() !== $this->timezone->getName()) {
+            // @codeCoverageIgnoreStart
             $initialDatetime = $initialDatetime->setTimezone($this->timezone);
+            // @codeCoverageIgnoreEnd
         }
 
         $this->initialDatetime = $initialDatetime;
@@ -77,5 +79,13 @@ class FakedClock implements Clock
             );
         }
         // @codeCoverageIgnoreEnd
+    }
+
+    /**
+     * @return DateTimeZone
+     */
+    public function getTimeZone(): DateTimeZone
+    {
+        return $this->timezone;
     }
 }
