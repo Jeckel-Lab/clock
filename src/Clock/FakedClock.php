@@ -42,7 +42,9 @@ class FakedClock implements Clock
         $this->timezone = $timezone ?: $initialDatetime->getTimezone();
 
         if ($initialDatetime->getTimezone()->getName() !== $this->timezone->getName()) {
+            // @codeCoverageIgnoreStart
             $initialDatetime = $initialDatetime->setTimezone($this->timezone);
+            // @codeCoverageIgnoreEnd
         }
 
         $this->initialDatetime = $initialDatetime;
