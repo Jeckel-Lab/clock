@@ -22,14 +22,11 @@ use JeckelLab\Contract\Infrastructure\System\Clock;
  */
 class FakedClock implements Clock
 {
-    /** @var DateTimeImmutable */
-    protected $initialDatetime;
+    protected DateTimeImmutable $initialDatetime;
 
-    /** @var DateTimeZone */
-    private $timezone;
+    private DateTimeZone $timezone;
 
-    /** @var DateInterval */
-    private $diff;
+    private DateInterval $diff;
 
     /**
      * Clock constructor.

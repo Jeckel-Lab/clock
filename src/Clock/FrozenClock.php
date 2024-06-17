@@ -21,13 +21,9 @@ use JeckelLab\Contract\Infrastructure\System\Clock as ClockInterface;
  */
 class FrozenClock implements ClockInterface
 {
-    /**
-     * @var DateTimeImmutable
-     */
-    protected $now;
+    protected DateTimeImmutable $now;
 
-    /** @var DateTimeZone */
-    private $timezone;
+    private DateTimeZone $timezone;
 
     /**
      * FakeClock constructor.

@@ -23,6 +23,7 @@ class ClockFactory
      * @param array $config
      * @return ClockInterface
      * @throws RuntimeException
+     * @throws Exception
      */
     public static function getClock(array $config = []): ClockInterface
     {

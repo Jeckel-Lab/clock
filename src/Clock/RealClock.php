@@ -21,14 +21,12 @@ use JeckelLab\Contract\Infrastructure\System\Clock as ClockInterface;
  */
 class RealClock implements ClockInterface
 {
-    /**
-     * @var DateTimeZone
-     */
-    private $timezone;
+    private DateTimeZone $timezone;
 
     /**
      * Clock constructor.
      * @param DateTimeZone|null $timezone
+     * @throws Exception
      */
     public function __construct(?DateTimeZone $timezone = null)
     {
