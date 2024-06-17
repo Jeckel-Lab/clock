@@ -21,7 +21,7 @@
         }
     },
     "require": {
-        "php": "^7.2 || ^8.0",
+        "php": "^8.0 || ^8.1",
         "jeckel-lab/contract": ">=1.1"
     },
     "require-dev": {
@@ -32,9 +32,14 @@
         "mikey179/vfsstream": "^1.6",
         "vimeo/psalm": "^4.3",
         "phpro/grumphp": "^0.19 || ^1.2.0",
-        "codeception/codeception": "^4.1"
+        "codeception/codeception": "^5.0.13"
     },
     "suggest": {
         "codeception/codeception": "Use helper to handle clock with your codeception tests"
+    },
+    "config": {
+        "allow-plugins": {
+            "phpro/grumphp": true
+        }
     }
 }

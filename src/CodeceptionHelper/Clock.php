@@ -14,7 +14,6 @@ use Codeception\Module;
 use Codeception\TestInterface;
 use Codeception\Util\Fixtures;
 use DateTimeImmutable;
-use DateTimeInterface;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -30,7 +29,7 @@ class Clock extends Module
      * @var string[]
      * @psalm-suppress NonInvariantDocblockPropertyType
      */
-    protected $config = [
+    protected array $config = [
         'date_format' => 'Y/m/d',
         'time_format' => 'H:i:s'
     ];
@@ -39,7 +38,7 @@ class Clock extends Module
      * @var array
      * @psalm-suppress NonInvariantDocblockPropertyType
      */
-    protected $requiredFields = ['fake_time_path', 'date_format', 'time_format'];
+    protected array $requiredFields = ['fake_time_path', 'date_format', 'time_format'];
 
     // @codingStandardsIgnoreStart
     /**
